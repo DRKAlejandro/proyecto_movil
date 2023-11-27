@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 FirebaseFirestore db = FirebaseFirestore.instance;
 
 Future<List<List<LatLng>>> getRoutes() async {
+  List<List<dynamic>> routes = [];
   List<LatLng> route_ = [];
   List<List<LatLng>> routes_ = [];
 
@@ -13,44 +14,33 @@ Future<List<List<LatLng>>> getRoutes() async {
   
   for (var doc in queryRoutes.docs) {
 
-    /*Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+    Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     if (data != null) {
       int numberOfFields = data.length;
       print("Número de campos en el documento: $numberOfFields");
 
-      for(int i = 0; i<numberOfFields; i++) {
-        for(int j = 0; j < data[i].length; j++){
-          print(data[i][j].latitude.toString());
-        }
+      for (int i = 1; i < numberOfFields+1; i++){
+        String rute = 'Ruta_' + i.toString();
+        print(rute);
+        print(doc[rute]);
+        print(doc[rute].runtimeType);
+        routes.add(doc[rute]);
       }
-    }*/
-    List<dynamic> ruta1Data = doc['Ruta_1'];
-    List<dynamic> ruta2Data = doc['Ruta_2'];
+      print(routes.toString());
 
-    print("Ruta1Data = " + ruta1Data[0].latitude.toString());
-    print("Ruta1Data = " + ruta1Data.length.toString());
-
-    for (int i = 0; i < ruta1Data.length;i++){
-      double latitude = ruta1Data[i].latitude;
-      double longitude = ruta1Data[i].longitude;
-      route_.add(LatLng(latitude,longitude));
+      for (int i = 0; i < routes.length;i++){
+        route_ = [];
+        for(int j = 0; j < routes[i].length; j++){
+          double latitude = routes[i][j].latitude;
+          double longitude = routes[i][j].longitude;
+          route_.add(LatLng(latitude,longitude));
+        }
+        print(route_.toString());
+        routes_.add(route_);
+      }
+      print(routes_.toString());
     }
-    routes_.add(route_);
-    print(routes_.toString());
-    route_ = [];
-
-    for (int i = 0; i < ruta2Data.length;i++){
-      double latitude = ruta2Data[i].latitude;
-      double longitude = ruta2Data[i].longitude;
-      route_.add(LatLng(latitude,longitude));
-    }
-    routes_.add(route_);
-    print(routes_.toString());
-    print("Ruta 1 = " + routes_[0].toString());
-    print("Ruta 2 = " + routes_[1].toString());
-
-    //routes.add(route);
   }
 
   return routes_;

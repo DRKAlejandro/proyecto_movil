@@ -26,10 +26,10 @@ class _BuscadorState extends State<Buscador> {
   final List<Lugar> _lugares = [
     Lugar(nombre: 'Sendero', latitud: 22.130306, longitud: -100.925074),
     Lugar(nombre: 'Glorieta Juarez', latitud: 22.150697, longitud: -100.956398),
-    Lugar(nombre: 'Centro', latitud: 22.150673, longitud: -100.974074),
+    Lugar(nombre: 'Centro', latitud: 22.150673, longitud: -100.9740704),
     Lugar(nombre: 'Plaza el Dorado', latitud: 22.155723, longitud: -101.004086),
     Lugar(
-        nombre: 'Plaza el Tangamanga',
+        nombre: 'Plaza Tangamanga',
         latitud: 22.139132,
         longitud: -101.001130),
     Lugar(
