@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 FirebaseFirestore db = FirebaseFirestore.instance;
 
 Future<List<List<LatLng>>> getRoutes() async {
+
   List<List<dynamic>> routes = [];
   List<LatLng> route_ = [];
   List<List<LatLng>> routes_ = [];
@@ -46,3 +47,33 @@ Future<List<List<LatLng>>> getRoutes() async {
   return routes_;
 }
 
+Future<List<Map<String, dynamic>>> getPoints() async {
+  List<Map<String, dynamic>> puntos = [];
+  Map<String, dynamic> punto = {};
+  CollectionReference collectionReferenceRoutes = FirebaseFirestore.instance.collection('lugares');
+
+  QuerySnapshot queryRoutes = await collectionReferenceRoutes.get();
+
+  for (var doc in queryRoutes.docs) {
+
+    Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+    if (data != null) {
+      int numberOfFields = data.length;
+      print("Número de campos en el documento: $numberOfFields");
+
+      for (int i = 1; i < numberOfFields+1; i++){
+        String point = 'Punto_' + i.toString();
+        print(point);
+        punto = {
+          "nombre": doc[point][0],
+          "latitud": doc[point][1].latitude,
+          "longitud": doc[point][1].longitude,
+        };
+        puntos.add(punto);
+      }
+      print(puntos.toString());
+    }
+  }
+  return puntos;
+}

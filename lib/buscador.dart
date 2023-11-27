@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
+import 'package:proyecto_movil/fire_services.dart';
 import 'package:proyecto_movil/geocoding.dart';
 
 class Lugar {
@@ -48,12 +49,24 @@ class _BuscadorState extends State<Buscador> {
         longitud: -100.985995),
   ];
 
+  List<Map<String, dynamic>> lugares_ = [];
+
   @override
   void initState() {
     super.initState();
     selectedPlaceLat = 0.0;
     selectedPlaceLng = 0.0;
     selectedPlaceName = '';
+    inicializarDatosAsync();
+  }
+
+  Future<void> inicializarDatosAsync() async {
+
+    List<Map<String, dynamic>> puntos = await getPoints();
+    print(puntos.toString());
+    setState(() {
+      lugares_ = puntos;
+    });
   }
 
   @override
