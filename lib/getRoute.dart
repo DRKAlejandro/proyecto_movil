@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'fire_services.dart';
 
 /*List<LatLng> points_R1 = [
@@ -27,7 +26,7 @@ List<LatLng> points_R2 = [
   LatLng(22.149778, -100.955675),
 ];*/
 
-List<List<LatLng>> combinedRoutes = [];//[points_R1, points_R2];
+List<Map<String, dynamic>> combinedRoutes = [];//[points_R1, points_R2];
 List<double> routeShortDistance= [];
 int bestRoute = -1;
 
@@ -41,9 +40,9 @@ class Distance{
     combinedRoutes = [points_R1, points_R2];
   }*/
 
-  Future<List<List<LatLng>>> getRoute() async {
+  Future<List<Map<String, dynamic>>> getRoute() async {
     try {
-      List<List<LatLng>> routes = await getRoutes();
+      List<Map<String, dynamic>> routes = await getRoutes();
       print (routes);
       print ("Tamaño de routes = " + routes.length.toString());
       return routes;
@@ -68,16 +67,24 @@ class Distance{
     return 12742 * asin(sqrt(a));
   }
 
-  Future<List<LatLng>> calculateRoute () async {
+  Future<Map<String, dynamic>> calculateRoute () async {
     combinedRoutes = await getRoute();
+    print(combinedRoutes);
+    print(combinedRoutes[0]);
+    print(combinedRoutes[0]["Nombre"]);
+    print(combinedRoutes[0]["Puntos"].length);
+    print(combinedRoutes[0]["Puntos"][0]);
+    print(combinedRoutes[0]["Puntos"][0]);
+    print(combinedRoutes[0]["Puntos"][0].latitude);
+    print(combinedRoutes[0]["Puntos"][0].longitude);
     print(combinedRoutes.toList().toString());
     for (int i = 0; i < combinedRoutes.length; i++) {
       double distance = 100.0;
       routeShortDistance.add(distance);
       print("Route " + i.toString());
-      for (int j = 0; j < combinedRoutes[i].length; j++) {
-        double latitude = combinedRoutes[i][j].latitude;
-        double longitude = combinedRoutes[i][j].longitude;
+      for (int j = 0; j < combinedRoutes[i]["Puntos"].length; j++) {
+        double latitude = combinedRoutes[i]["Puntos"][j].latitude;
+        double longitude = combinedRoutes[i]["Puntos"][j].longitude;
         distance = calculateDistance(latitude, longitude);
         print("distance: " + distance.toString());
         if(distance < routeShortDistance[i]){
@@ -97,7 +104,9 @@ class Distance{
       }
     }
     print("Mejor ruta = " + bestRoute.toString() + "minDistancia = " + minDistance.toString());
+    print(combinedRoutes[bestRoute]);
     routeShortDistance.clear();
+    //return combinedRoutes[bestRoute];
     return combinedRoutes[bestRoute];
   }
 } 

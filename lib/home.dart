@@ -1,4 +1,3 @@
-import 'package:proyecto_movil/apiMapa.dart';
 import 'package:proyecto_movil/buscador.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,6 +16,7 @@ class _HomeState extends State<Home> {
   late GoogleMapController mapController;
 
   LatLng _center = LatLng(22.149926, -100.997686);
+  String nombreRuta = '';
   String lugarDestino = '';
   double latDestino = 0.0;
   double lngDestino = 0.0;
@@ -59,6 +59,10 @@ class _HomeState extends State<Home> {
         ),
       );
     });
+  }
+
+  void setMarkers(){
+
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -139,16 +143,17 @@ class _HomeState extends State<Home> {
                       );
                       if (result != null) {
                         Distance _distance = Distance(latitudPointA: result['latitud'], longitudPointA: result['longitud']);
-                        List<LatLng>? route = await _distance.calculateRoute();
+                        Map<String, dynamic>? route = await _distance.calculateRoute();
                         print(route.toString());
                         polyPoints = [];
-                        polyPoints = route;
+                        polyPoints = route["Puntos"];
                         print("Polypoints = " + polyPoints.toString());
                         setPolyLines();
                         setState(() {
                           lugarDestino = result['nombre'];
                           latDestino = result['latitud'];
                           lngDestino = result['longitud'];
+                          nombreRuta = route["Nombre"];
 
                           // Limpiar los marcadores existentes antes de agregar uno nuevo
                           _markers.clear();
@@ -188,6 +193,8 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: [
                   Text('$lugarDestino',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('$nombreRuta',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ],
               )

@@ -3,14 +3,6 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:proyecto_movil/fire_services.dart';
 import 'package:proyecto_movil/geocoding.dart';
 
-class Lugar {
-  final String nombre;
-  final double latitud;
-  final double longitud;
-
-  Lugar({required this.nombre, required this.latitud, required this.longitud});
-}
-
 class Buscador extends StatefulWidget {
   const Buscador({Key? key}) : super(key: key);
 
@@ -24,31 +16,6 @@ class _BuscadorState extends State<Buscador> {
   late int selectedPlaceIndex;
   late String selectedPlaceName;
 
-  final List<Lugar> _lugares = [
-    Lugar(nombre: 'Sendero', latitud: 22.130306, longitud: -100.925074),
-    Lugar(nombre: 'Glorieta Juarez', latitud: 22.150697, longitud: -100.956398),
-    Lugar(nombre: 'Centro', latitud: 22.150673, longitud: -100.9740704),
-    Lugar(nombre: 'Plaza el Dorado', latitud: 22.155723, longitud: -101.004086),
-    Lugar(
-        nombre: 'Plaza Tangamanga',
-        latitud: 22.139132,
-        longitud: -101.001130),
-    Lugar(
-        nombre: 'Soriana el Paseo', latitud: 22.141201, longitud: -100.955118),
-    Lugar(
-        nombre: 'Jardín de Tequisquiapan',
-        latitud: 22.150306,
-        longitud: -100.992231),
-    Lugar(
-        nombre: 'Zona Universitaria',
-        latitud: 22.148173,
-        longitud: -101.014330),
-    Lugar(
-        nombre: 'Centro de Alto Rendimiento',
-        latitud: 22.142182,
-        longitud: -100.985995),
-  ];
-
   List<Map<String, dynamic>> lugares_ = [];
 
   @override
@@ -58,16 +25,18 @@ class _BuscadorState extends State<Buscador> {
     selectedPlaceLng = 0.0;
     selectedPlaceName = '';
     inicializarDatosAsync();
+    //lectura()
   }
 
   Future<void> inicializarDatosAsync() async {
-
     List<Map<String, dynamic>> puntos = await getPoints();
     print(puntos.toString());
     setState(() {
       lugares_ = puntos;
     });
   }
+
+  Future<void> lectura() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +47,11 @@ class _BuscadorState extends State<Buscador> {
         onSearch: (value) {
           setState(() {
             int selectedPlaceIndex =
-                _lugares.indexWhere((lugar) => lugar.nombre == value);
+                lugares_.indexWhere((lugar) => lugar['nombre'] == value);
             if (selectedPlaceIndex != -1) {
-              selectedPlaceLat = _lugares[selectedPlaceIndex].latitud;
-              selectedPlaceLng = _lugares[selectedPlaceIndex].longitud;
-              selectedPlaceName = _lugares[selectedPlaceIndex].nombre;
+              selectedPlaceLat = lugares_[selectedPlaceIndex]['latitud'];
+              selectedPlaceLng = lugares_[selectedPlaceIndex]['longitud'];
+              selectedPlaceName = lugares_[selectedPlaceIndex]['nombre'];
             } else {
               selectedPlaceLat = 0.0;
               selectedPlaceLng = 0.0;
@@ -90,7 +59,8 @@ class _BuscadorState extends State<Buscador> {
             }
           });
         },
-        suggestions: _lugares.map((lugar) => lugar.nombre).toList(),
+        suggestions:
+            lugares_.map<String>((lugar) => lugar['nombre'] as String).toList(),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
