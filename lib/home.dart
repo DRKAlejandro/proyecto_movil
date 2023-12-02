@@ -149,6 +149,10 @@ class _HomeState extends State<Home> {
                         polyPoints = route["Puntos"];
                         print("Polypoints = " + polyPoints.toString());
                         setPolyLines();
+                        BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+                              ImageConfiguration(),
+                              "lib/assets/camion.png",
+                        );
                         setState(() {
                           lugarDestino = result['nombre'];
                           latDestino = result['latitud'];
@@ -169,17 +173,17 @@ class _HomeState extends State<Home> {
                           );
 
                           for(int i = 0; i < route["Puntos"].length; i++) {
-                            
-                            _markers.add(
-                              Marker(
-                                markerId: MarkerId('Parada de camión ' + i.toString()),
-                                position: LatLng(route["Puntos"][i].latitude, route["Puntos"][i].longitude),
-                                infoWindow: InfoWindow(
-                                  title: 'Parada de camion',
-                                ),
+                          _markers.add(
+                            Marker(
+                              markerId: MarkerId('Parada de camión ' + i.toString()),
+                              position: LatLng(route["Puntos"][i].latitude, route["Puntos"][i].longitude),
+                              icon: markerbitmap,
+                              infoWindow: InfoWindow(
+                                title: 'Parada de camion',
                               ),
-                            );
-                          }
+                            ),
+                          );
+                        }
 
                           //MOVER CAMARA A LA POSICION DEL MARKER
                           mapController.animateCamera(
