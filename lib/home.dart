@@ -167,6 +167,20 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           );
+
+                          for(int i = 0; i < route["Puntos"].length; i++) {
+                            
+                            _markers.add(
+                              Marker(
+                                markerId: MarkerId('Parada de camión ' + i.toString()),
+                                position: LatLng(route["Puntos"][i].latitude, route["Puntos"][i].longitude),
+                                infoWindow: InfoWindow(
+                                  title: 'Parada de camion',
+                                ),
+                              ),
+                            );
+                          }
+
                           //MOVER CAMARA A LA POSICION DEL MARKER
                           mapController.animateCamera(
                             CameraUpdate.newLatLngZoom(
